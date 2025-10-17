@@ -20,5 +20,5 @@ public class ArticleFileDto {
 
     private Long fileSize;
 
-    private Long article;
+    private Long articleId; 
 }

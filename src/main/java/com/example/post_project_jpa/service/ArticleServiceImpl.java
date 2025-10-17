@@ -1,6 +1,7 @@
 package com.example.post_project_jpa.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -45,6 +46,18 @@ public class ArticleServiceImpl implements ArticleService {
         // 5. 저장된 Article ID 반환
         return article.getId();
     }
+
+
+    @Override
+    public ArticleDto retrieveArticle(Long id) {
+
+        Article article = articleRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다. ID: " + id));
+
+            
+        return entityToDto(article);
+    }
+    
     
     
 }

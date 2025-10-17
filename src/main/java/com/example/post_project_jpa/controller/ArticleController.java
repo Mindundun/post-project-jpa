@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.post_project_jpa.dto.ArticleDto;
-import com.example.post_project_jpa.dto.ArticleFileRequestDto;
 import com.example.post_project_jpa.service.ArticleService;
 
 import lombok.RequiredArgsConstructor;
@@ -15,10 +14,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 @RestController
@@ -40,6 +40,14 @@ public class ArticleController {
 
         return ResponseEntity.ok().body(Map.of("id", id));
     }
+
+    // 게시글 상세조회
+    @GetMapping("/articles/{id}")
+    public ResponseEntity<ArticleDto> getArticle(@PathVariable(name="id") Long id) {
+        ArticleDto article = articleService.retrieveArticle(id);
+        return ResponseEntity.ok().body(article);
+    }
+    
     
 
 }

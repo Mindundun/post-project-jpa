@@ -19,6 +19,8 @@ public interface ArticleService {
     // 게시글 등록
     public Long registerArticle(ArticleDto articleDto, List<MultipartFile> files);
 
+    // 게시글 상세 조회
+    public ArticleDto retrieveArticle(Long id);
 
     // default method
     default Article dtoToEntity(ArticleDto articleDto){
@@ -31,6 +33,7 @@ public interface ArticleService {
                     .fileName(fileDto.getFileName())
                     .filePath(fileDto.getFilePath())
                     .fileSize(fileDto.getFileSize())
+                    // .articleId(fileDto.getArticleId())
                     // 연관관계 설정 - article은 아직 만들어진 Article이 없으니까 나중에 세팅하거나, builder에선 제외
                     .build())
                 .collect(Collectors.toList());
@@ -60,6 +63,7 @@ public interface ArticleService {
                                                     .fileName(file.getFileName())
                                                     .filePath(file.getFilePath())
                                                     .fileSize(file.getFileSize())
+                                                    .articleId(file.getArticleId())
                                                     .build())
                                                 .collect(Collectors.toList());
 

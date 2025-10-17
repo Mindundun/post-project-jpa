@@ -32,5 +32,5 @@ public class ArticleFile {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
-    private Article article;
+    private Article articleId;
 }
