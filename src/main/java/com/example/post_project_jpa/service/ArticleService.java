@@ -63,7 +63,7 @@ public interface ArticleService {
                                                     .fileName(file.getFileName())
                                                     .filePath(file.getFilePath())
                                                     .fileSize(file.getFileSize())
-                                                    .articleId(file.getArticleId())
+                                                    // .articleId(file.getArticleId())
                                                     .build())
                                                 .collect(Collectors.toList());
 
