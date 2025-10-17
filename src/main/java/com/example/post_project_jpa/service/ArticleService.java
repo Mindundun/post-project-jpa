@@ -50,7 +50,7 @@ public interface ArticleService {
 
         // 양방향 연관관계일 경우 files 안의 article 필드도 세팅
         if (files != null) {
-            files.forEach(file -> file.setArticle(article));
+            files.forEach(file -> file.setArticleId(article));
         }
 
         return article;
