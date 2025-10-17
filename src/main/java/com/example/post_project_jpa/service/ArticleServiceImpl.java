@@ -16,7 +16,9 @@ import com.example.post_project_jpa.repository.ArticleRepository;
 import com.example.post_project_jpa.util.FileUploadUtils;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -54,7 +56,7 @@ public class ArticleServiceImpl implements ArticleService {
         Article article = articleRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다. ID: " + id));
 
-            
+          
         return entityToDto(article);
     }
     

@@ -33,8 +33,6 @@ public interface ArticleService {
                     .fileName(fileDto.getFileName())
                     .filePath(fileDto.getFilePath())
                     .fileSize(fileDto.getFileSize())
-                    // .articleId(fileDto.getArticleId())
-                    // 연관관계 설정 - article은 아직 만들어진 Article이 없으니까 나중에 세팅하거나, builder에선 제외
                     .build())
                 .collect(Collectors.toList());
         }
@@ -50,20 +48,21 @@ public interface ArticleService {
 
         // 양방향 연관관계일 경우 files 안의 article 필드도 세팅
         if (files != null) {
-            files.forEach(file -> file.setArticleId(article));
+            files.forEach(file -> file.setArticle(article));
         }
 
         return article;
     }
 
     default ArticleDto entityToDto(Article article){
+
         List<ArticleFileDto> fileDtos = article.getFiles().stream()
                                                 .map(file -> ArticleFileDto.builder()
                                                     .id(file.getId())
                                                     .fileName(file.getFileName())
                                                     .filePath(file.getFilePath())
                                                     .fileSize(file.getFileSize())
-                                                    // .articleId(file.getArticleId())
+                                                    .articleId(file.getArticle() != null ? file.getArticle().getId() : null)
                                                     .build())
                                                 .collect(Collectors.toList());
 
