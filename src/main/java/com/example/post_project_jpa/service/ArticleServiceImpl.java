@@ -53,7 +53,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleDto retrieveArticle(Long id) {
 
-        Article article = articleRepository.findById(id)
+        Article article = articleRepository.findByArticleId(id)
             .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다. ID: " + id));
 
           

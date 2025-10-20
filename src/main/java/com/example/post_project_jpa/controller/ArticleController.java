@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +39,7 @@ public class ArticleController {
         
         Long id = articleService.registerArticle(articleDto, files);
 
-        return ResponseEntity.ok().body(Map.of("id", id));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("id", id));
     }
 
     // 게시글 상세조회
