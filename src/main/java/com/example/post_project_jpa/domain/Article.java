@@ -27,7 +27,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-@ToString
+@ToString(exclude = "files")
 @Table(name = "article")
 public class Article {
     @Id
@@ -44,6 +44,7 @@ public class Article {
     private LocalDateTime regDate;
 
     // 파일
+    @Builder.Default // builder 패턴 사용 시 null로 초기화 되지 말라고 작성
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "article", cascade = CascadeType.PERSIST)
     private List<ArticleFile> files = new ArrayList<>();
 
@@ -61,4 +62,19 @@ public class Article {
         this.writer = writer;
     }
 
+    // 연관관계 메소드(양방향일때 필수)
+    // public void addFile(ArticleFile file) {
+    //     this.files.add(file);
+    //     file.setArticle(this);
+    // }
+
+    public void addArticleFile(List<ArticleFile> files) {
+        // List에 있는 값을 한 개씩 처리
+        // 만약 this.files.add(file); 처리 시 2차원 배열로 저장되어버림
+        this.files.addAll(files);
+
+        files.forEach(file -> {
+            file.setArticle(this);
+        });
+    }
 }

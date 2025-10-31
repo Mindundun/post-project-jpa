@@ -49,6 +49,12 @@ public class ArticleController {
         return ResponseEntity.ok().body(article);
     }
     
+    // 게시글 전체조회
+    @GetMapping("/articles/")
+    public ResponseEntity<List<ArticleDto>> getArticle() {
+        List<ArticleDto> articles = articleService.retrieveArticle();
+        return ResponseEntity.ok().body(articles);
+    }
     
 
 }

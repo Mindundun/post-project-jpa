@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.post_project_jpa.domain.Article;
+import com.example.post_project_jpa.domain.ArticleFile;
 import com.example.post_project_jpa.dto.ArticleDto;
 import com.example.post_project_jpa.dto.ArticleFileDto;
-import com.example.post_project_jpa.dto.ArticleFileRequestDto;
 import com.example.post_project_jpa.repository.ArticleRepository;
 import com.example.post_project_jpa.util.FileUploadUtils;
 
@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
+    private final ArticleFileService articleFileService;
     private final FileUploadUtils fileUploadUtils;
 
     
@@ -33,20 +34,15 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional(readOnly = false)
     public Long registerArticle(ArticleDto articleDto, List<MultipartFile> files){
 
-        // 1. MultipartFile 리스트를 실제 저장하고, 저장된 파일 정보로 ArticleFileDto 리스트 생성
         List<ArticleFileDto> uploadedFiles = fileUploadUtils.uploadFiles(files);
-        
-        // 2. ArticleDto에 업로드된 파일 리스트 세팅
-        articleDto.setFiles(uploadedFiles);
-        
-        // 3. ArticleDto -> Article 엔티티 변환 (files 필드 포함)
+
         Article article = dtoToEntity(articleDto);
         
-        // 4. Article 저장 (cascade 옵션에 의해 files도 함께 저장됨)
-        articleRepository.save(article);
-        
-        // 5. 저장된 Article ID 반환
-        return article.getId();
+        List<ArticleFile> articleFiles =  uploadedFiles.stream().map(articleFileService::dtoToEntity).collect(Collectors.toList());
+
+        article.addArticleFile(articleFiles);
+
+        return articleRepository.save(article).getId();
     }
 
 
@@ -55,11 +51,56 @@ public class ArticleServiceImpl implements ArticleService {
 
         Article article = articleRepository.findByArticleId(id)
             .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다. ID: " + id));
+        
+        List<ArticleFile> files = article.getFiles();
 
-          
-        return entityToDto(article);
+        ArticleDto articleDto = entityToDto(article);
+
+        List<ArticleFileDto> articleFiles = files.stream().map(articleFileService::entityToDto).collect(Collectors.toList());
+
+        articleDto.getFiles().addAll(articleFiles);
+
+        // log.info("============article : {}",article);  // @ToString 덕분에 대부분 필드 출력됨
+        // log.info("============article.getFiles() : {}",article.getFiles());// 연관 컬렉션도 확인
+
+        return articleDto;
+    }
+
+    // 게시글 전체 조회
+    @Override
+    public List<ArticleDto> retrieveArticle() {
+        
+        List<Article> articles = articleRepository.findAll();
+
+
+        // 2. Article → ArticleDto 변환 및 파일 포함
+        List<ArticleDto> articleDtos = articles.stream().map(article -> {
+            ArticleDto articleDto = entityToDto(article); // 게시글 DTO 변환
+
+            // 게시글 파일 변환
+            List<ArticleFileDto> fileDtos = article.getFiles().stream()
+                    .map(articleFileService::entityToDto)
+                    .collect(Collectors.toList());
+
+            articleDto.getFiles().addAll(fileDtos);
+
+            return articleDto;
+        }).collect(Collectors.toList());
+        
+
+        return articleDtos;
+    }
+
+    // 게시글 수정
+    @Override
+    public ArticleDto modifyArticle(ArticleDto articleDto) {
+        // TODO Auto-generated method stub
+        return null;
     }
     
     
     
+    
 }
+
+

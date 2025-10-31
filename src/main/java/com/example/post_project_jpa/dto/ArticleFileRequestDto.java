@@ -6,6 +6,7 @@ import java.util.List;
 import com.example.post_project_jpa.domain.Article;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +24,7 @@ public class ArticleFileRequestDto {
 
 
     @Data
+    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ArticleFileDto { // static inner class

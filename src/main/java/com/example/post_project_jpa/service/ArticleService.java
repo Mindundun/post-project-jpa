@@ -22,58 +22,30 @@ public interface ArticleService {
     // 게시글 상세 조회
     public ArticleDto retrieveArticle(Long id);
 
+    // 게시글 목록 조회
+    public List<ArticleDto> retrieveArticle();
+
+    // 게시글 수정
+    public ArticleDto modifyArticle(ArticleDto articleDto);
+
+
     // default method
-    default Article dtoToEntity(ArticleDto articleDto){
-        List<ArticleFile> files = null;
-        
-        if (articleDto.getFiles() != null) {
-            files = articleDto.getFiles().stream()
-                .map(fileDto -> ArticleFile.builder()
-                    .id(fileDto.getId())
-                    .fileName(fileDto.getFileName())
-                    .filePath(fileDto.getFilePath())
-                    .fileSize(fileDto.getFileSize())
-                    .build())
-                .collect(Collectors.toList());
-        }
-
-        Article article = Article.builder()
-            .id(articleDto.getId())
-            .title(articleDto.getTitle())
-            .contents(articleDto.getContents())
-            .writer(articleDto.getWriter())
-            .regDate(articleDto.getRegDate())
-            .files(files != null ? files : new ArrayList<>())
-            .build();
-
-        // 양방향 연관관계일 경우 files 안의 article 필드도 세팅
-        if (files != null) {
-            files.forEach(file -> file.setArticle(article));
-        }
-
-        return article;
+    default Article dtoToEntity(ArticleDto article){
+        return Article.builder()
+                .title(article.getTitle())
+                .writer(article.getWriter())
+                .contents(article.getContents())
+                .regDate(article.getRegDate())
+                .build();
     }
 
     default ArticleDto entityToDto(Article article){
-
-        List<ArticleFileDto> fileDtos = article.getFiles().stream()
-                                                .map(file -> ArticleFileDto.builder()
-                                                    .id(file.getId())
-                                                    .fileName(file.getFileName())
-                                                    .filePath(file.getFilePath())
-                                                    .fileSize(file.getFileSize())
-                                                    .articleId(file.getArticle() != null ? file.getArticle().getId() : null)
-                                                    .build())
-                                                .collect(Collectors.toList());
-
         return ArticleDto.builder()
-            .id(article.getId())
-            .title(article.getTitle())
-            .contents(article.getContents())
-            .writer(article.getWriter())
-            .regDate(article.getRegDate())
-            .files(fileDtos) 
-            .build();
+                .id(article.getId())
+                .title(article.getTitle())
+                .writer(article.getWriter())
+                .contents(article.getContents())
+                .regDate(article.getRegDate())
+                .build();
     }
-
 }

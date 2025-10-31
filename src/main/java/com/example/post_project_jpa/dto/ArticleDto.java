@@ -1,8 +1,10 @@
 package com.example.post_project_jpa.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +21,8 @@ public class ArticleDto {
     private String contents;
     private LocalDateTime regDate;
 
-    private List<ArticleFileDto> files; // 연관된 파일 DTO 리스트
+    @Builder.Default
+    private List<ArticleFileDto> files = new ArrayList<>(); // 연관된 파일 DTO 리스트
 }
 
     
