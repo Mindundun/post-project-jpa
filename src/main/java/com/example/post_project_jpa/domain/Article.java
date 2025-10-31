@@ -45,7 +45,7 @@ public class Article {
 
     // 파일
     @Builder.Default // builder 패턴 사용 시 null로 초기화 되지 말라고 작성
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "article", cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "article", cascade = CascadeType.ALL)
     private List<ArticleFile> files = new ArrayList<>();
 
 
