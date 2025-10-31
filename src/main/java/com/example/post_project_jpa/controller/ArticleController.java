@@ -9,6 +9,7 @@ import com.example.post_project_jpa.dto.ArticleDto;
 import com.example.post_project_jpa.service.ArticleService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,11 +18,12 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
-
+@Slf4j
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
@@ -54,6 +56,15 @@ public class ArticleController {
     public ResponseEntity<List<ArticleDto>> getArticle() {
         List<ArticleDto> articles = articleService.retrieveArticle();
         return ResponseEntity.ok().body(articles);
+    }
+
+    // 게시글삭제
+    @DeleteMapping("/articles/{id}")
+    public ResponseEntity<String> deleteArticle(@PathVariable(value = "id") Long id){
+        log.info("===================delete1");
+
+        articleService.removeArticle(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
     }
     
 

@@ -28,6 +28,9 @@ public interface ArticleService {
     // 게시글 수정
     public ArticleDto modifyArticle(ArticleDto articleDto);
 
+    // 게시글 삭제
+    public void removeArticle(Long id);
+
 
     // default method
     default Article dtoToEntity(ArticleDto article){

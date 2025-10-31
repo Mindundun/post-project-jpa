@@ -93,10 +93,23 @@ public class ArticleServiceImpl implements ArticleService {
 
     // 게시글 수정
     @Override
+    @Transactional(readOnly = false)
     public ArticleDto modifyArticle(ArticleDto articleDto) {
         // TODO Auto-generated method stub
         return null;
     }
+
+    // 게시글 삭제
+    @Override
+    @Transactional(readOnly = false)
+    public void removeArticle(Long id) {
+        
+        articleRepository.findByArticleId(id)
+            .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다. ID: " + id));
+
+        articleRepository.deleteById(id);
+    }
+    
     
     
     
