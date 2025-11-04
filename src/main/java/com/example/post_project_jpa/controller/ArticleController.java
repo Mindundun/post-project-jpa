@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @Slf4j
@@ -58,11 +61,18 @@ public class ArticleController {
         return ResponseEntity.ok().body(articles);
     }
 
+    // 게시글 수정
+    @PutMapping("/articles/{id}")
+    public ResponseEntity<String> putArticle(@PathVariable(value = "id") Long id, @RequestBody ArticleDto articleDto) {
+        articleDto.setId(id);
+
+        articleService.modifyArticle(articleDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
+    }
+
     // 게시글삭제
     @DeleteMapping("/articles/{id}")
     public ResponseEntity<String> deleteArticle(@PathVariable(value = "id") Long id){
-        log.info("===================delete1");
-
         articleService.removeArticle(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
     }

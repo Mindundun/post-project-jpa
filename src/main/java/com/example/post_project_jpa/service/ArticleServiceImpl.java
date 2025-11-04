@@ -45,7 +45,7 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.save(article).getId();
     }
 
-
+    // 게시글 상세조회
     @Override
     public ArticleDto retrieveArticle(Long id) {
 
@@ -94,9 +94,14 @@ public class ArticleServiceImpl implements ArticleService {
     // 게시글 수정
     @Override
     @Transactional(readOnly = false)
-    public ArticleDto modifyArticle(ArticleDto articleDto) {
-        // TODO Auto-generated method stub
-        return null;
+    public void modifyArticle(ArticleDto articleDto) {
+        Long id = articleDto.getId();
+        Article article = articleRepository.findByArticleId(id)
+                            .orElseThrow(() -> new IllegalArgumentException("해당하는 " + id + "의 게시글이 없습니다."));
+        
+        article.changeTitle(articleDto.getTitle());
+        article.changeContents(articleDto.getContents());
+        article.changeWriter(articleDto.getWriter());
     }
 
     // 게시글 삭제

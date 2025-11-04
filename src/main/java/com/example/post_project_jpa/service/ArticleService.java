@@ -26,7 +26,7 @@ public interface ArticleService {
     public List<ArticleDto> retrieveArticle();
 
     // 게시글 수정
-    public ArticleDto modifyArticle(ArticleDto articleDto);
+    public void modifyArticle(ArticleDto articleDto);
 
     // 게시글 삭제
     public void removeArticle(Long id);
